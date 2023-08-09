@@ -50,7 +50,7 @@ public class CreateUserTest extends BaseTest{
 						.assertThat().statusCode(APIHttpStatus.CREATED_201.getCode())
 							.extract().path("id");
 			
-		System.out.println("User id: " + userId);
+		System.out.println("User id : " + userId);
 		
 		
 		RestClient clientGet = new RestClient(prop, baseURI);
@@ -60,6 +60,8 @@ public class CreateUserTest extends BaseTest{
 			.then().log().all()
 				.assertThat().statusCode(APIHttpStatus.OK_200.getCode())
 					.assertThat().body("id", equalTo(userId));
+		
+		System.out.println("end test");
 						
 	}
 	
