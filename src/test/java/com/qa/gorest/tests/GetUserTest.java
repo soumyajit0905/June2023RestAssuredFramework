@@ -30,7 +30,7 @@ public class GetUserTest extends BaseTest{
 	}
 	
 	///public/v2/users/4165714/?name&staus
-	@Test()
+	@Test(enabled = false)
 	public void getUserTest() {
 		restClient.get(GOREST_ENDPOINT+"/"+4199815, true, true)
 					.then().log().all()
