@@ -36,13 +36,17 @@ pipeline
         stage('Run Docker Image with Tests') {
     steps {
         script {
-            sh "docker run --name apitesting -e MAVEN_OPTS='-Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml' naveenkhunteta/my-maven-api:latest"
-       	    sh "docker start apitesting"
+        
+        def exitCode = sh(script: "docker run --name apitesting -e MAVEN_OPTS='-Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml' naveenkhunteta/my-maven-api:latest", returnStatus: true)
+            if (exitCode != 0) {
+                currentBuild.result = 'FAILURE' // Mark the build as failed if tests fail
+            }
+            
+            // Even if tests fail, copy the report (if present)
+            sh "docker start apitesting"
        	    sh "sleep 60"
-       	    sh "docker cp apitesting:/app/reports/APIExecutionReport.html ${WORKSPACE}"
-       	    
-       	    sh "docker rm -f apitesting"
-       			
+            sh "docker cp apitesting:/app/reports/APIExecutionReport.html ${WORKSPACE}"
+            sh "docker rm -f apitesting"
        			 }
     		}
 		}
