@@ -73,44 +73,7 @@ pipeline
         }
         
         
-         stage("Deploy to STAGE"){
-            steps{
-                echo("deploy to STAGE done")
-            }
-        }
-        
-        
-        stage('Run Docker Image with Sanity Tests') {
-    steps {
-        script {
-        
-        def exitCode = sh(script: "docker run --name apitestingsanity${BUILD_NUMBER} -e MAVEN_OPTS='-Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml' naveenkhunteta/my-maven-api:latest", returnStatus: true)
-            if (exitCode != 0) {
-                currentBuild.result = 'FAILURE' // Mark the build as failed if tests fail
-            }
-            
-            // Even if tests fail, copy the report (if present)
-            sh "docker start apitestingsanity${BUILD_NUMBER}"
-       	   // sh "sleep 60"
-            sh "docker cp apitestingsanity${BUILD_NUMBER}:/app/reports/APIExecutionReport.html ${WORKSPACE}/reports"
-            sh "docker rm -f apitestingsanity${BUILD_NUMBER}"
-       			 }
-    		}
-		}
-        
-        
-        
-        stage('Publish Sanity Extent Report'){
-            steps{
-                     publishHTML([allowMissing: false,
-                                  alwaysLinkToLastBuild: false, 
-                                  keepAll: false, 
-                                  reportDir: 'reports', 
-                                  reportFiles: 'APIExecutionReport.html', 
-                                  reportName: 'API HTML Sanity Extent Report', 
-                                  reportTitles: ''])
-            }
-        }
+         
 
          
     }
