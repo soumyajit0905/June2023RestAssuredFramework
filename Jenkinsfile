@@ -52,7 +52,7 @@ pipeline
             // Even if tests fail, copy the report (if present)
             sh "docker start apitesting${BUILD_NUMBER}"
        	   // sh "sleep 60"
-            sh "docker cp apitesting${BUILD_NUMBER}:/app/reports/APIExecutionReport.html ${WORKSPACE}:/reports"
+            sh "docker cp apitesting${BUILD_NUMBER}:/app/reports/APIExecutionReport.html ${WORKSPACE}/reports"
             sh "docker rm -f apitesting${BUILD_NUMBER}"
        			 }
     		}
