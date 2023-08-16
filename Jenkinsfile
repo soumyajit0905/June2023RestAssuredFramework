@@ -36,7 +36,10 @@ pipeline
         stage('Run Docker Image with Tests') {
     steps {
         script {
-            sh "docker run --rm -e MAVEN_OPTS='-Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml' naveenkhunteta/my-maven-api:latest"
+            sh "docker run --name apitesting -e MAVEN_OPTS='-Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml' naveenkhunteta/my-maven-api:latest"
+       	    sh "docker cp apitesting:/app/reports/APIExecutionReport.html ${WORKSPACE}"
+       	    sh "docker rm -f apitesting"		
+       			
        			 }
     		}
 		}
