@@ -60,14 +60,14 @@ pipeline
 		
 		
 		
-		stage('Publish Extent Report'){
+		stage('Publish Regression Extent Report'){
             steps{
                      publishHTML([allowMissing: false,
                                   alwaysLinkToLastBuild: false, 
                                   keepAll: false, 
                                   reportDir: 'reports', 
                                   reportFiles: 'APIExecutionReport.html', 
-                                  reportName: 'API HTML Extent Report', 
+                                  reportName: 'API HTML Regression Extent Report', 
                                   reportTitles: ''])
             }
         }
@@ -98,6 +98,19 @@ pipeline
     		}
 		}
         
+        
+        
+        stage('Publish Sanity Extent Report'){
+            steps{
+                     publishHTML([allowMissing: false,
+                                  alwaysLinkToLastBuild: false, 
+                                  keepAll: false, 
+                                  reportDir: 'reports', 
+                                  reportFiles: 'APIExecutionReport.html', 
+                                  reportName: 'API HTML Sanity Extent Report', 
+                                  reportTitles: ''])
+            }
+        }
 
          
     }
