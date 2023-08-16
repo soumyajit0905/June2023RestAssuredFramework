@@ -84,16 +84,16 @@ pipeline
     steps {
         script {
         
-        def exitCode = sh(script: "docker run --name apitesting${BUILD_NUMBER} -e MAVEN_OPTS='-Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml' naveenkhunteta/my-maven-api:latest", returnStatus: true)
+        def exitCode = sh(script: "docker run --name apitestingsanity${BUILD_NUMBER} -e MAVEN_OPTS='-Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml' naveenkhunteta/my-maven-api:latest", returnStatus: true)
             if (exitCode != 0) {
                 currentBuild.result = 'FAILURE' // Mark the build as failed if tests fail
             }
             
             // Even if tests fail, copy the report (if present)
-            sh "docker start apitesting${BUILD_NUMBER}"
+            sh "docker start apitestingsanity${BUILD_NUMBER}"
        	   // sh "sleep 60"
-            sh "docker cp apitesting${BUILD_NUMBER}:/app/reports/APIExecutionReport.html ${WORKSPACE}/reports"
-            sh "docker rm -f apitesting${BUILD_NUMBER}"
+            sh "docker cp apitestingsanity${BUILD_NUMBER}:/app/reports/APIExecutionReport.html ${WORKSPACE}/reports"
+            sh "docker rm -f apitestingsanity${BUILD_NUMBER}"
        			 }
     		}
 		}
