@@ -37,8 +37,11 @@ pipeline
     steps {
         script {
             sh "docker run --name apitesting -e MAVEN_OPTS='-Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml' naveenkhunteta/my-maven-api:latest"
+       	    sh "docker start apitesting"
+       	    sh "sleep 60"
        	    sh "docker cp apitesting:/app/reports/APIExecutionReport.html ${WORKSPACE}"
-       	    sh "docker rm -f apitesting"		
+       	    
+       	    sh "docker rm -f apitesting"
        			
        			 }
     		}
