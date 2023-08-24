@@ -31,7 +31,7 @@ pipeline
                 }
             }
         }
-        
+
         
         
         stage("Deploy to QA"){
@@ -39,6 +39,9 @@ pipeline
                 echo("deploy to qa done")
             }
         }
+             
+             
+                
                 
         stage('Run Docker Image with Regression Tests') {
     steps {
