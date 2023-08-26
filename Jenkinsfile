@@ -47,8 +47,8 @@ pipeline
     steps {
         script {
             def dockerCommand = """
-                docker run --name apitesting${BUILD_NUMBER} -e MAVEN_OPTS \
-                naveenkhunteta/apitest:latest -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml
+                docker run --name apitesting${BUILD_NUMBER} \
+                naveenkhunteta/apitest:latest /bin/bash -c "export MAVEN_OPTS='-Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml' && mvn test"
             """
             
             def exitCode = bat(script: dockerCommand, returnStatus: true)
@@ -63,6 +63,7 @@ pipeline
         }
     }
 }
+
 
        
 		
