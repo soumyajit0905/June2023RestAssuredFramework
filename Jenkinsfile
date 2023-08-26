@@ -43,11 +43,12 @@ pipeline
              
                 
                 
-       stage('Run Docker Image with Regression Tests') {
+      stage('Run Docker Image with Regression Tests') {
     steps {
         script {
             def dockerCommand = """
-                docker run --name apitesting${BUILD_NUMBER} -e MAVEN_OPTS='-Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml' naveenkhunteta/apitest:latest
+                docker run --name apitesting${BUILD_NUMBER} -e MAVEN_OPTS \
+                naveenkhunteta/apitest:latest -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml
             """
             
             def exitCode = bat(script: dockerCommand, returnStatus: true)
@@ -62,6 +63,7 @@ pipeline
         }
     }
 }
+
        
 		
 		
