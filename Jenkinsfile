@@ -65,9 +65,6 @@ pipeline
 }
 
 
-       
-		
-		
 		
 		stage('Publish Regression Extent Report'){
             steps{
