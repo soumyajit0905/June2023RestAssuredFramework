@@ -50,7 +50,7 @@ pipeline
             def dockerCommand = """
                 docker run --name apitesting${BUILD_NUMBER} \
                 -v "${WORKSPACE}/reports:/app/reports" \
-                naveenkhunteta/apitest:latest \
+                naveenkhunteta/apitestnew:latest \
                 /bin/bash -c "mvn test -Dsurefire.suiteXmlFiles=${suiteXmlFilePath}"
             """
             
@@ -59,6 +59,9 @@ pipeline
             if (exitCode != 0) {
                 currentBuild.result = 'FAILURE'
             }
+            bat "docker start apitesting${BUILD_NUMBER}"
+            bat "docker cp apitesting${BUILD_NUMBER}:/app/reports/APIExecutionReport.html ${WORKSPACE}/reports"
+            bat "docker rm -f apitesting${BUILD_NUMBER}"
         }
     }
 }
