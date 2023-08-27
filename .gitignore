@@ -1,6 +1,5 @@
 allure-results/
 test-output/
-reports/
 
 application.log
 ##############################
