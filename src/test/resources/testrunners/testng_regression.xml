@@ -39,6 +39,15 @@
 			
 		</classes>
 	</test>
+	
+	<test name="Go Rest API Scehma Test">
+		<parameter name="baseURI" value="https://gorest.co.in" />
+
+		<classes>
+			<class name="com.qa.gorest.tests.APISchemaValidationTest" />
+			
+		</classes>
+	</test>
 
 
 	<!-- <test name="Circuit API Test">
