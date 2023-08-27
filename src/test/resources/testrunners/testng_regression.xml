@@ -22,7 +22,7 @@
 	</test>
 	 -->
 	
-	 <!--<test name="Go Rest API Test">
+	 <test name="Go Rest API Test">
 		<parameter name="baseURI" value="https://gorest.co.in" />
 
 		<classes>
@@ -38,7 +38,7 @@
 			<class name="com.qa.gorest.tests.CreateUserTest" />
 			
 		</classes>
-	</test>-->
+	</test>
 	
 	<test name="Go Rest API Scehma Test">
 		<parameter name="baseURI" value="https://gorest.co.in" />

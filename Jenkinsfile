@@ -6,10 +6,10 @@ pipeline
     	maven 'maven'
         }
         
-    environment{
-   
+    environment {
         BUILD_NUMBER = "${BUILD_NUMBER}"
-   
+        DOCKER_IMAGE_NAME = "apitesting-new:${BUILD_NUMBER}"
+        DOCKER_REGISTRY = "naveenkhunteta" // Change this to your Docker Hub username
     }
     
 
@@ -39,6 +39,35 @@ pipeline
                 echo("deploy to qa done")
             }
         }
+        
+        
+        stage('Docker Build') {
+            steps {
+                script {
+                    def dockerBuildCommand = """
+                        docker build -t ${DOCKER_IMAGE_NAME} .
+                    """
+                    bat(script: dockerBuildCommand)
+                }
+            }
+        }
+        
+        stage('Tag and Push Docker Image') {
+            steps {
+                script {
+                    def dockerTagCommand = """
+                        docker tag ${DOCKER_IMAGE_NAME} ${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}
+                    """
+                    bat(script: dockerTagCommand)
+                    
+                    def dockerPushCommand = """
+                        docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}
+                    """
+                    bat(script: dockerPushCommand)
+                }
+            }
+        }
+        
              
              
                 
@@ -47,24 +76,32 @@ pipeline
     steps {
         script {
             def suiteXmlFilePath = 'src/test/resources/testrunners/testng_regression.xml'
-            def dockerCommand = """
+            def dockerImage = "${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}" // Use the tagged image name
+
+            def dockerRunCommand = """
                 docker run --name apitesting${BUILD_NUMBER} \
                 -v "${WORKSPACE}/reports:/app/reports" \
-                naveenkhunteta/apitestnew:latest \
+                ${dockerImage} \
                 /bin/bash -c "mvn test -Dsurefire.suiteXmlFiles=${suiteXmlFilePath}"
             """
             
-            def exitCode = bat(script: dockerCommand, returnStatus: true)
+            def exitCode = bat(script: dockerRunCommand, returnStatus: true)
             
             if (exitCode != 0) {
                 currentBuild.result = 'FAILURE'
             }
-            bat "docker start apitesting${BUILD_NUMBER}"
-            bat "docker cp apitesting${BUILD_NUMBER}:/app/reports/APIExecutionReport.html ${WORKSPACE}/reports"
-            bat "docker rm -f apitesting${BUILD_NUMBER}"
+
+            def dockerStartCommand = "docker start apitesting${BUILD_NUMBER}"
+            def dockerCopyCommand = "docker cp apitesting${BUILD_NUMBER}:/app/reports/APIExecutionReport.html ${WORKSPACE}/reports"
+            def dockerRemoveCommand = "docker rm -f apitesting${BUILD_NUMBER}"
+            
+            bat script: dockerStartCommand, returnStatus: true
+            bat script: dockerCopyCommand, returnStatus: true
+            bat script: dockerRemoveCommand, returnStatus: true
         }
     }
 }
+
 
 
 
