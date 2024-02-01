@@ -12,7 +12,7 @@ pipeline
         {
             steps
             {
-                 git 'https://github.com/jglick/simple-maven-project-with-tests.git'
+                 git 'https://github.com/soumyajit0905/June2023RestAssuredFramework.git'
                  sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
             post 
@@ -36,7 +36,7 @@ pipeline
         stage('Regression API Automation Test') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    git 'https://github.com/naveenanimation20/June2023RestAssuredFramework.git'
+                    git 'https://github.com/soumyajit0905/June2023RestAssuredFramework.git'
                     sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_regression.xml"
                     
                 }
@@ -81,7 +81,7 @@ pipeline
         stage('Sanity Automation Test') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    git 'https://github.com/naveenanimation20/June2023RestAssuredFramework.git'
+                    git 'https://github.com/soumyajit0905/June2023RestAssuredFramework.git'
                     sh "mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/testrunners/testng_sanity.xml"
                     
                 }
